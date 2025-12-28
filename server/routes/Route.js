@@ -7,22 +7,23 @@ import {
   fetchUserImg,
   fetchUserName,
 } from "../controllers/Posts.js";
+import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
 
-// AUTH ROUTES
+// AUTH ROUTES (Public)
 router.post("/register", register);
 router.post("/login", login);
 
-// POST ROUTES
-router.post("/posts", createPost);
-router.get("/posts", fetchAllPosts);
+// POST ROUTES (Protected)
+router.post("/posts", verifyToken, createPost);
+router.get("/posts", verifyToken, fetchAllPosts);
 
-// USER ROUTES
-router.get("/user/name", fetchUserName);
-router.get("/user/image", fetchUserImg);
+// USER ROUTES (Protected)
+router.get("/user/name", verifyToken, fetchUserName);
+router.get("/user/image", verifyToken, fetchUserImg);
 
-// STORIES ROUTES
-router.get("/stories", fetchAllStories);
+// STORIES ROUTES (Protected)
+router.get("/stories", verifyToken, fetchAllStories);
 
 export default router;

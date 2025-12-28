@@ -1,8 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import { Server } from "socket.io";
 import http from "http";
+import { Server } from "socket.io";
 import dotenv from "dotenv";
 
 import authRoutes from "./routes/Route.js";
@@ -12,14 +12,14 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
+/* -------------------- MIDDLEWARE -------------------- */
 app.use(express.json());
 app.use(cors());
 
-// Routes
+/* -------------------- ROUTES -------------------- */
 app.use("/api", authRoutes);
 
-// HTTP + Socket.io
+/* -------------------- HTTP + SOCKET.IO -------------------- */
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -31,10 +31,10 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
-  SocketHandler(socket,io);
+  SocketHandler(socket, io);
 });
 
-// MongoDB Atlas connection
+/* -------------------- DATABASE -------------------- */
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
